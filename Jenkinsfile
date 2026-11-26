@@ -19,23 +19,38 @@ pipeline {
         }
 
         
+
 stage('2. Copy Files to E Drive') {
     steps {
         bat '''
-        echo Checking deployment directory permissions...
+        echo ==========================================
+        echo COPYING APPLICATION FROM C DRIVE TO E DRIVE
+        echo ==========================================
 
-        if not exist "%DEPLOY_DIR%" mkdir "%DEPLOY_DIR%"
+        set "SOURCE_DIR=%WORKSPACE%"
+        set "DEST_DIR=E:\\DjangoProjects\\SimpleLogin"
 
-        echo Copying application files...
+        if not exist "%DEST_DIR%" (
+            mkdir "%DEST_DIR%"
+        )
 
-        robocopy "%WORKSPACE%" "%DEPLOY_DIR%" /E /COPY:DAT /R:2 /W:2 /XD .git venv __pycache__ /XF db.sqlite3
+        echo Source: %SOURCE_DIR%
+        echo Destination: %DEST_DIR%
 
-        if %ERRORLEVEL% GEQ 8 exit /b 1
+        robocopy "%SOURCE_DIR%" "%DEST_DIR%" /E /COPY:DAT /DCOPY:DAT /R:2 /W:2 /XD .git venv __pycache__ /XF .gitignore .gitattributes db.sqlite3
 
-        echo Files copied successfully.
+        if %ERRORLEVEL% GEQ 8 (
+            echo ERROR: File copying failed.
+            exit /b 1
+        )
+
+        echo ==========================================
+        echo FILES COPIED SUCCESSFULLY TO E DRIVE
+        echo ==========================================
         '''
     }
 }
+
 
 
         stage('3. Create Virtual Environment') {
