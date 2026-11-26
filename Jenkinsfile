@@ -18,17 +18,25 @@ pipeline {
             }
         }
 
-        stage('2. Copy Files to E Drive') {
-            steps {
-                bat '''
-                if not exist "%DEPLOY_DIR%" mkdir "%DEPLOY_DIR%"
+        
+stage('2. Copy Files to E Drive') {
+    steps {
+        bat '''
+        echo Checking deployment directory permissions...
 
-                robocopy . "%DEPLOY_DIR%" /E /XD .git venv __pycache__ /XF db.sqlite3
+        if not exist "%DEPLOY_DIR%" mkdir "%DEPLOY_DIR%"
 
-                if errorlevel 8 exit /b 1
-                '''
-            }
-        }
+        echo Copying application files...
+
+        robocopy "%WORKSPACE%" "%DEPLOY_DIR%" /E /COPY:DAT /R:2 /W:2 /XD .git venv __pycache__ /XF db.sqlite3
+
+        if %ERRORLEVEL% GEQ 8 exit /b 1
+
+        echo Files copied successfully.
+        '''
+    }
+}
+
 
         stage('3. Create Virtual Environment') {
             steps {
