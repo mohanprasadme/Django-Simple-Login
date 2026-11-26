@@ -9,15 +9,15 @@ pipeline {
 
     stages {
 
-    stage('1. Git Checkout') {
-        steps {
-            echo 'Checking out source code from GitHub'
+        stage('1. Git Checkout') {
+            steps {
+                echo 'Checking out source code from GitHub'
 
-            git branch: 'main',
-                url: 'https://github.com/mohanprasadme/Django-Simple-Login.git'
+                git branch: 'main',
+                    url: 'https://github.com/mohanprasadme/Django-Simple-Login.git'
+            }
         }
-    }
-}
+
         stage('2. Copy Files to E Drive') {
             steps {
                 bat '''
@@ -97,3 +97,4 @@ pipeline {
         }
     }
 }
+
