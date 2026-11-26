@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -27,7 +26,7 @@ stage('2. Copy Files to E Drive') {
         echo COPYING APPLICATION FROM C DRIVE TO E DRIVE
         echo ==========================================
 
-        set "SOURCE_DIR=%WORKSPACE%"
+        set "SOURCE_DIR=E:\SimpleLogin_Source"
         set "DEST_DIR=E:\\DjangoProjects\\SimpleLogin"
 
         if not exist "%DEST_DIR%" (
@@ -106,18 +105,3 @@ stage('2. Copy Files to E Drive') {
                     echo Install the service after the first deployment.
                 )
                 '''
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'Django deployment completed successfully!'
-        }
-
-        failure {
-            echo 'Django deployment failed. Check Jenkins Console Output.'
-        }
-    }
-}
-
